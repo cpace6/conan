@@ -171,6 +171,12 @@ class RemoteRegistry(object):
                 raise ConanException("Remote '%s' not found in remotes" % remote_name)
         self._add_update(remote_name, remote, verify_ssl, exists_function, insert)
 
+    # TODO: FINISH IMPLEMENTING
+    def rename(self, old_name, new_name, verify_ssl=True):
+        def exists_function(remotes):
+            if old_name not in remotes:
+                raise ConanException("Remote '%s' not found in remotes" % old_name)
+
     def define_remotes(self, remotes):
         with fasteners.InterProcessLock(self._filename + ".lock", logger=logger):
             _, refs = self._load()

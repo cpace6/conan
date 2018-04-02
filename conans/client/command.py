@@ -958,9 +958,15 @@ class Command(object):
         parser_upd.add_argument("-i", "--insert", nargs="?", const=0, type=int,
                                 help="insert remote at specific index",
                                 action=OnceArgument)
-
+        parser_ren = subparsers.add_parser('rename', help='rename a remote')
+        parser_ren.add_argument('old_name', help='current name of the remote')
+        parser_ren.add_argument('new_name', help='new name for the remote')
+        parser_ren.add_argument('verify_ssl',
+                                help='Verify SSL certificated. Default True',
+                                default="True", nargs="?")
         subparsers.add_parser('list_ref',
                               help='list the package recipes and its associated remotes')
+
         parser_padd = subparsers.add_parser('add_ref',
                                             help="associate a recipe's reference to a remote")
         parser_padd.add_argument('reference', help='package recipe reference')
@@ -990,6 +996,8 @@ class Command(object):
             return self._conan.remote_remove(remote)
         elif args.subcommand == "update":
             return self._conan.remote_update(remote, url, verify_ssl, args.insert)
+        elif args.subcommand == "rename":
+            return self._conan.remote_rename(old_name, new_name, verify_ssl)
         elif args.subcommand == "list_ref":
             refs = self._conan.remote_list_ref()
             self._outputer.remote_ref_list(refs)
